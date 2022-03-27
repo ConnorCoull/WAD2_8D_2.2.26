@@ -1,0 +1,18 @@
+{% extends 'jot/base.html' %}
+{% load static %}
+
+
+{% block title_block %}
+    Add a Review 
+{%endblock %}
+
+{% block body_block %}
+<h1 class="h1-title-block">Add a Review</h1><br />
+<div class="form-div">
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn_primary">Add Review</button>
+    </form>
+</div>
+{% endblock %}

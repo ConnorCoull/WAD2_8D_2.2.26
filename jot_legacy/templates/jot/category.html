@@ -1,0 +1,24 @@
+{% extends 'jot/base.html' %}
+
+{% load static %}
+
+{% block title_block %}
+    {% if category %}
+        {{ category.category_name }}
+    {% else %}
+        Category not Found
+    {% endif %}
+{%endblock %}
+
+{% block body_block %}
+  {% if books %}
+    <h1 class="h1-title-block">{{ category_name }}</h1>
+    <ul>
+    {% for book in books %}
+    <li><a href="{% url 'jot:categories' category.category_name %}"><h3 class="h3-subtitle-block">category.category_name</h3></a></li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <h3 class="h3-subtitle-block">There appears to be no sign of book life anywhere....</h3>
+  {% endif %}
+{% endblock %}

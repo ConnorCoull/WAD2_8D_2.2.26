@@ -1,0 +1,18 @@
+{% extends 'jot/base.html' %}
+{% load static %}
+{% block title_block %}
+    Reviews
+{%endblock %}
+{% block body_block %}
+    <!--main should become a scroll div but if now make one here -->
+    <h1 class="h1-title-block">book.name reviews:</h1><br />
+    {% if reviews %}
+        {% for review in reviews %}
+            <li><h3 class="h3-subtitle-block">review.username - review.rating/5 - review.date</h3>
+                <br />
+                <p class="main-paragraph">review.content</li>
+        {% endfor %}
+    {% else %}
+        <strong>This book has no reviews! add one(link)?</strong>
+    {% endif %}
+{% endblock %}
