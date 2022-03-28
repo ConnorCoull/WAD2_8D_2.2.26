@@ -1,5 +1,5 @@
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE','jot_project.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE','jot_legacy.settings')
 import django
 django.setup()
 from jot.models import Book, Review, Category
