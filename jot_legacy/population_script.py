@@ -2,7 +2,7 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE','jot_project.settings')
 import django
 django.setup()
-from jot.models import Book, Review, Category
+from jot.models import Book, Review, Category, UserProfile
 from django.contrib.auth.models import User
 
 def populate():
