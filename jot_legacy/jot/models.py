@@ -3,6 +3,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 import os
 from django.template.defaultfilters import slugify
+ 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Models.py
 #                       
@@ -39,7 +42,7 @@ class Category(models.Model):
 
 
 def file_path(instance, filename):
-    filename_no_ext, ext = os.path.splittext(filename)
+    filename_no_ext, ext = os.path.splitext(filename)
     if isinstance(instance, Book):
         return 'media/books/{filename}/{filename_ext}'.format(filename=filename_no_ext, filename_ext = ext)
 
@@ -107,6 +110,8 @@ class Review(models.Model):
     review_date_written = models.DateField(auto_now=False, auto_now_add=True)
     review_content = models.CharField(max_length=1024)
 
+    
+
     def __str__(self):
         return self.review_content
 
@@ -118,8 +123,14 @@ class Review(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_picture = models.ImageField(upload_to=file_path)  
-    bio = models.TextField(blank=True, default="hello, i'm on JOT!")
-    user_picture_file=str(user_picture)+'pdf'
+    bio = models.CharField(blank=True, default="hello, i'm on JOT!", max_length=250)
+    user_picture_file=str(user_picture)+'.pdf'
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.user.username)
+        super(UserProfile, self).save(*args, **kwargs)
+
+  
 
     def __str__(self):
         return self.user.username
@@ -128,12 +139,12 @@ class UserProfile(models.Model):
         verbose_name = 'UserProfile'
         verbose_name_plural = 'UserProfiles'
 
-#Below is not mines (Marks)
+
+#Below is not Marks
+
 
 #This function just updates the related User Model when the UserProfile gets updated
-#@receiver(post_save, sender=User)
-#def create_user_profile(sender, instance, created, **kwargs):
-#    if created:
-#        UserProfile.objects.create(user=instance)
-
-
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
